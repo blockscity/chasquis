@@ -1,0 +1,17 @@
+service:
+  name: chasquis
+
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+functions:
+  second:
+    handler: messengers.create
+    events:
+      - http:
+          method: post
+          path: messengers

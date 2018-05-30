@@ -5,14 +5,18 @@ plugins:
   - serverless-webpack
   - serverless-offline
   - serverless-dynamodb-local
-  - serverless-mocha-plugin
 
 provider:
   name: aws
   runtime: nodejs8.10
   environment:
-      DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+      DYNAMODB_TABLE_PREFIX: ${self:service}-${opt:stage, self:provider.stage}
 
+custom:
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
 
 functions:
   messengers_create:
@@ -41,3 +45,18 @@ functions:
               parameters:
                 paths:
                   id: true
+resources:
+  Resources:
+    Messengers:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Messengers
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

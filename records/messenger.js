@@ -1,11 +1,26 @@
-export default class Messenger {
-    constructor() {
+class Messenger {
 
+
+    constructor(id, content) {
+        this.id = id;
+
+        this.content = content;
     }
 
     toJson() {
         return {
-            test: "test"
+            data: {
+                id: `${this.id}`,
+                type: "messengers",
+                attributes:
+                    {
+                        content: this.content
+                    }
+            }
         }
     }
 }
+
+Messenger.type = "messengers";
+
+export default Messenger;

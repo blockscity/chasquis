@@ -1,4 +1,6 @@
-import * as messengers from './records/messengers';
+import Messengers from './records/messengers';
+import Medium from './records/medium';
+import Ajv from 'ajv';
 
 
 function ok(data) {
@@ -25,23 +27,78 @@ function bad_request(data) {
     };
 }
 
-function errorify(data) {
+function errorify(err) {
+    if (!(err instanceof Ajv.ValidationError)) {
+        return {
+            errors: [
+                {
+                    detail: JSON.stringify(err)
+                }
+            ]
+        };
+    }
+
     return {
-        errors: [
-            {
-                detail: JSON.stringify(data)
+        errors: err.errors.map(e => {
+            return {
+                status: "400",
+                source: {
+                    pointer: e.dataPath
+                },
+                title: e.keyword,
+                detail: e.message
             }
-        ]
+        }).reduce((acc, item) => [...acc, item], [])
     };
 }
 
+let messengers = new Messengers(new Medium());
+
 export const messengers_create = async (event, context, cb) => {
+    var ajv = new Ajv({
+        allErrors: false,
+        jsonPointers: true,
+    });
+    let schema = {
+        $async: true,
+        title: "messengers request",
+        type: "object",
+        properties: {
+            data: {
+                type: "object",
+                properties: {
+                    attributes: {
+                        type: "object",
+                        properties: {
+                            id: {
+                                type: "string"
+                            }
+                        },
+                        required: ["id"]
+                    }
+                },
+                required: ["attributes"]
+            }
+        },
+        required: ["data"]
+    };
+
+
     try {
+        var validate = await ajv.compile(schema);
         let body = JSON.parse(event.body);
-        let messenger = await messengers.create(body);
+        let data = await validate(body).catch(err => {
+            throw err
+        });
+
+        let messenger = await messengers.create(data);
         cb(null, created(messenger.toJson()));
     } catch (e) {
-        cb(e, bad_request(errorify(e)))
+        if (!(e instanceof Ajv.ValidationError)) {
+            cb(e)
+        }
+
+        cb(null, bad_request(errorify(e)))
     }
 };
 

@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "The messengers service",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "preinstall": "npm i -g mocha",
+    "test": "mocha --require babel-register test/**/*.js"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -11,10 +12,18 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.6.0",
+    "bluebird": "^3.5.1",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "serverless-dynamodb-local": "^0.2.30",
     "serverless-offline": "^3.24.4",
     "serverless-webpack": "^3.1.1",
     "webpack": "^3.3.0"
   },
   "author": "sjkyspa",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "ajv": "^6.5.0",
+    "aws-sdk": "^2.248.1"
+  }
 }

@@ -4,10 +4,15 @@ service:
 plugins:
   - serverless-webpack
   - serverless-offline
+  - serverless-dynamodb-local
+  - serverless-mocha-plugin
 
 provider:
   name: aws
   runtime: nodejs8.10
+  environment:
+      DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+
 
 functions:
   messengers_create:

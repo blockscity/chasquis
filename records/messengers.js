@@ -1,10 +1,16 @@
 import Messenger from './messenger';
 
 
-export const create = async (params) => {
-    return new Messenger();
-};
+export default class Messengers {
+    constructor(medium) {
+        this.medium = medium;
+    }
 
-export const of = async (mid) => {
-    return new Messenger();
-};
+    async create(params) {
+        return new Messenger();
+    };
+
+    async of(mid) {
+        return new Messenger();
+    };
+}

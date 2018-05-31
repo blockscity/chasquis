@@ -1,9 +1,10 @@
-import * as apis from '../apis';
+import AWS from 'aws-sdk';
 import Promise from 'bluebird';
 import chai from 'chai';
-import AWS from 'aws-sdk';
 import yaml from 'js-yaml';
 import fs from 'fs';
+import * as apis from '../apis';
+
 
 const expect = chai.expect;
 
@@ -11,16 +12,9 @@ const expect = chai.expect;
 describe('messengers_create', () => {
     let dynamodb;
     before(async () => {
-        let options = {
-            region: 'eu-west-2',
-            endpoint: 'http://localhost:8000',
-            credentials: {
-                accessKeyId: "test",
-                secretAccessKey: "test"
-            }
-        };
-        AWS.config.update(options);
-        dynamodb = new AWS.DynamoDB(options);
+        dynamodb = new AWS.DynamoDB({
+            endpoint: 'http://localhost:8000'
+        });
         process.env.DYNAMODB_TABLE_PREFIX = "test";
     });
 
@@ -107,7 +101,8 @@ describe('messengers_create', () => {
                 })}`
             },
             {}
-        ).then(async () => {
+        ).then(async (res) => {
+            expect(res.statusCode).to.be.equal(201);
             return await Promise.promisify(apis.messengers_create)(
                 {
                     body: `${JSON.stringify({

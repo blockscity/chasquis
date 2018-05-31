@@ -11,16 +11,9 @@ const expect = chai.expect;
 describe('messengers_update', () => {
     let dynamodb;
     before(async () => {
-        let options = {
-            region: 'eu-west-2',
-            endpoint: 'http://localhost:8000',
-            credentials: {
-                accessKeyId: "test",
-                secretAccessKey: "test"
-            }
-        };
-        AWS.config.update(options);
-        dynamodb = new AWS.DynamoDB(options);
+        dynamodb = new AWS.DynamoDB({
+            endpoint: 'http://localhost:8000'
+        });
         process.env.DYNAMODB_TABLE_PREFIX = "test";
     });
 

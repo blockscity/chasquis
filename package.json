@@ -4,7 +4,7 @@
   "description": "The messengers service",
   "scripts": {
     "preinstall": "npm i -g mocha",
-    "test": "mocha --require babel-register test/**/*.js"
+    "test": "IS_OFFLINE=true AWS_ACCESS_KEY_ID=test AWS_SECRET_ACCESS_KEY=test AWS_DEFAULT_REGION=us-west-2 AWS_REGION=us-west-2 AWS_ENDPOINT=http://localhost:8000 mocha --require babel-register test/**/*.js"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",

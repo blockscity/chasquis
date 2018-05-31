@@ -1,24 +1,9 @@
 'use strict';
-import AWS from 'aws-sdk';
 import Promise from 'bluebird';
 
-
 export default class Medium {
-    constructor(options) {
-        let _options = options || {};
-
-        // connect to local DB if running offline
-
-        options = {
-            region: 'eu-west-2',
-            endpoint: 'http://localhost:8000',
-            credentials: {
-                accessKeyId: "test",
-                secretAccessKey: "test"
-            }
-        };
-        // AWS.config.
-        this.client = new AWS.DynamoDB.DocumentClient(options);
+    constructor(client) {
+        this.client = client;
     }
 
     async create(params) {

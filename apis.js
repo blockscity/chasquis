@@ -59,7 +59,15 @@ function errorify(err) {
     };
 }
 
-let messengers = new Messengers(new Medium());
+let AWS = require("aws-sdk");
+let options;
+if (process.env.IS_OFFLINE) {
+    options = {
+        endpoint: 'http://localhost:8000'
+    };
+}
+let dynamo = new AWS.DynamoDB.DocumentClient(options);
+let messengers = new Messengers(new Medium(dynamo));
 
 export const messengers_create = async (event, context, cb) => {
     var ajv = new Ajv({

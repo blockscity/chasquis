@@ -24,6 +24,13 @@ export default class Messengers {
     };
 
     async of(mid) {
-        return new Messenger();
+        try {
+            let rehydrated = await this.medium.of(mid, Messenger.type).catch(err => {
+                throw err;
+            });
+            return new Messenger(mid, rehydrated.content);
+        } catch (e) {
+            throw e;
+        }
     };
 }

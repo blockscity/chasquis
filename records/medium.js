@@ -45,8 +45,22 @@ export default class Medium {
 
     }
 
-    of(id, params) {
+    async of(id, type, params) {
+        let ofId = await Promise.promisify(this.client.get, {context: this.client})(
+            {
+                TableName: `${process.env.DYNAMODB_TABLE_PREFIX}_${type.toUpperCase()}`,
+                Key: {
+                    id: `${id}`
+                }
+            }
+        ).catch(err => {
+            throw err;
+        });
 
+        return {
+            id: id,
+            content: ofId.Item.content
+        }
     }
 
     delete(id) {

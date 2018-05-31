@@ -21,13 +21,14 @@ describe('messengers_create', () => {
         };
         AWS.config.update(options);
         dynamodb = new AWS.DynamoDB(options);
+        process.env.DYNAMODB_TABLE_PREFIX = "test";
     });
 
     beforeEach(async () => {
         try {
             let sls = yaml.safeLoad(fs.readFileSync('./serverless.yml', 'utf8'));
             let table = sls['resources']['Resources']['Messengers']['Properties'];
-            table.TableName = 'Messengers';
+            table.TableName = `${process.env.DYNAMODB_TABLE_PREFIX}_${"messengers".toUpperCase()}`;
 
             await Promise.promisify(dynamodb.createTable, {context: dynamodb})(table);
         } catch (e) {
@@ -38,7 +39,7 @@ describe('messengers_create', () => {
 
     afterEach(async () => {
         var params = {
-            TableName: "Messengers"
+            TableName: `${process.env.DYNAMODB_TABLE_PREFIX}_${"messengers".toUpperCase()}`
         };
 
         try {
@@ -48,6 +49,10 @@ describe('messengers_create', () => {
             console.error(e);
             throw e;
         }
+    });
+
+    after(() => {
+        process.env.DYNAMODB_TABLE_PREFIX = undefined;
     });
 
     it('should able to create the messenger', async () => {

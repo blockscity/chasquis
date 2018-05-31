@@ -26,7 +26,7 @@ export default class Medium {
         const expired = new Date(timestamp + 30 * 60000);
         return await Promise.promisify(this.client.put, {context: this.client})(
             {
-                TableName: `Messengers`,
+                TableName: `${process.env.DYNAMODB_TABLE_PREFIX}_${params.type.toUpperCase()}`,
                 Item: {
                     id: params.id,
                     content: params.content,

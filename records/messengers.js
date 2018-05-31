@@ -8,7 +8,7 @@ export default class Messengers {
 
     async create(params) {
         try {
-            let data = await this.medium.create({
+            await this.medium.create({
                 id: params.id,
                 type: Messenger.type
             }).catch(err => {
@@ -17,7 +17,7 @@ export default class Messengers {
                 }
                 throw err;
             });
-            return new Messenger();
+            return new Messenger(params.id, {});
         } catch (e) {
             throw e;
         }

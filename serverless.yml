@@ -17,6 +17,7 @@ custom:
     start:
       port: 8000
       inMemory: true
+      migrate: true
 
 functions:
   messengers_create:
@@ -36,10 +37,20 @@ functions:
               paths:
                 id: true
   messengers_update:
-      handler: apis.messengers_of
+      handler: apis.messengers_update
       events:
         - http:
             method: patch
+            path: messengers/{id}
+            request:
+              parameters:
+                paths:
+                  id: true
+  messengers_delete:
+      handler: apis.messengers_delete
+      events:
+        - http:
+            method: delete
             path: messengers/{id}
             request:
               parameters:
@@ -50,7 +61,7 @@ resources:
     Messengers:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Messengers
+        TableName: ${self:service}-${opt:stage, self:provider.stage}_MESSENGERS
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S

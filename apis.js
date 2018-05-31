@@ -39,7 +39,7 @@ function errorify(err) {
         return {
             errors: [
                 {
-                    detail: JSON.stringify(err)
+                    detail: JSON.stringify(err.message)
                 }
             ]
         };
@@ -129,6 +129,7 @@ export const messengers_update = async (event, context, cb) => {
         let body = JSON.parse(event.body);
         let id = event.pathParameters.id;
         let messenger = await messengers.of(id);
+
         await messenger.update(body.data);
         cb(null, ok(messenger.toJson()));
     } catch (e) {

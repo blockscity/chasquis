@@ -17,7 +17,7 @@ export default class Messengers {
                 }
                 throw err;
             });
-            return new Messenger(params.id, {});
+            return new Messenger(params.id, {}, this.medium);
         } catch (e) {
             throw e;
         }
@@ -28,7 +28,7 @@ export default class Messengers {
             let rehydrated = await this.medium.of(mid, Messenger.type).catch(err => {
                 throw err;
             });
-            return new Messenger(mid, rehydrated.content);
+            return new Messenger(mid, rehydrated.content, this.medium);
         } catch (e) {
             throw e;
         }

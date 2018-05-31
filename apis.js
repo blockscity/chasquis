@@ -122,7 +122,7 @@ export const messengers_update = async (event, context, cb) => {
         let body = JSON.parse(event.body);
         let id = event.pathParameters.id;
         let messenger = await messengers.of(id);
-        await messenger.update(body);
+        await messenger.update(body.data);
         cb(null, ok(messenger.toJson()));
     } catch (e) {
         cb(e, bad_request(errorify(e)))

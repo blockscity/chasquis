@@ -41,8 +41,27 @@ export default class Medium {
         })
     }
 
-    update(params) {
-
+    async update(id, type, data) {
+        const timestamp = new Date().getTime();
+        let params = {
+            TableName: `${process.env.DYNAMODB_TABLE_PREFIX}_${type.toUpperCase()}`,
+            Key: {
+                id: id,
+            },
+            ExpressionAttributeValues: {
+                ':content': JSON.stringify(data.content),
+                ':updated_at': timestamp
+            },
+            UpdateExpression: 'SET content = :content, updated_at = :updated_at',
+            ReturnValues: 'ALL_NEW',
+        };
+        let result = await Promise.promisify(this.client.update, {context: this.client})(params).catch(err => {
+            throw err;
+        });
+        return {
+            id: id,
+            content: JSON.parse(result.Attributes.content)
+        }
     }
 
     async of(id, type, params) {

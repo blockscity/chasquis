@@ -80,3 +80,16 @@ curl -X DELETE http://localhost:3000/messengers/11
 ```javascript
 {}
 ```
+
+
+## Deploy
+
+### AWS config
+configure the access_key_id, access_key, and the region
+```bash
+aws configure
+```
+
+```bash
+sls deploy
+```

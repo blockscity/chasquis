@@ -8,7 +8,7 @@ export default class Medium {
 
     async create(params) {
         const timestamp = new Date().getTime();
-        const expired = new Date(timestamp + 30 * 60000);
+        const expired = new Date(timestamp + 30 * 60000).getTime();
         return await Promise.promisify(this.client.put, {context: this.client})(
             {
                 TableName: `${process.env.DYNAMODB_TABLE_PREFIX}_${params.type.toUpperCase()}`,

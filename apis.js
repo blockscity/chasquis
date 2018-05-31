@@ -10,6 +10,13 @@ function ok(data) {
     };
 }
 
+function no_content() {
+    return {
+        statusCode: 204,
+        body: JSON.stringify({}),
+    };
+}
+
 function created(data) {
     return {
         statusCode: 201,
@@ -112,7 +119,7 @@ export const messengers_of = async (event, context, cb) => {
         let messenger = await messengers.of(id);
         cb(null, ok(messenger.toJson()));
     } catch (e) {
-        cb(e, bad_request(errorify(e)))
+        cb(null, bad_request(errorify(e)))
     }
 };
 
@@ -125,6 +132,17 @@ export const messengers_update = async (event, context, cb) => {
         await messenger.update(body.data);
         cb(null, ok(messenger.toJson()));
     } catch (e) {
-        cb(e, bad_request(errorify(e)))
+        cb(null, bad_request(errorify(e)))
+    }
+};
+
+export const messengers_delete = async (event, context, cb) => {
+    try {
+        let id = event.pathParameters.id;
+        await messengers.delete(id);
+        cb(null, no_content());
+    } catch (e) {
+        console.log(e);
+        cb(null, bad_request(errorify(e)))
     }
 };

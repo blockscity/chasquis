@@ -8,7 +8,7 @@ import fs from 'fs';
 const expect = chai.expect;
 
 
-describe('messengers_update', () => {
+describe('messengers_delete', () => {
     let dynamodb;
     before(async () => {
         let options = {
@@ -65,28 +65,16 @@ describe('messengers_update', () => {
         process.env.DYNAMODB_TABLE_PREFIX = undefined;
     });
 
-    it('should able to update the messenger by id', async () => {
-        return Promise.promisify(apis.messengers_update)(
+    it('should able to delete the messenger by id', async () => {
+        return Promise.promisify(apis.messengers_delete)(
             {
-                body: `${JSON.stringify({
-                    data: {
-                        id: "1",
-                        type: "messengers",
-                        attributes: {
-                            content: {
-                                access_token: "access_token"
-                            }
-                        }
-                    }
-                })}`,
                 pathParameters: {
                     id: '1'
                 }
             },
             {}
         ).then(response => {
-            expect(response.statusCode).to.be.equal(200);
-            expect(JSON.parse(response.body).data.attributes.content.access_token).to.equal("access_token")
+            expect(response.statusCode).to.be.equal(204);
         });
     });
 });

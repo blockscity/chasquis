@@ -82,7 +82,16 @@ export default class Medium {
         }
     }
 
-    delete(id) {
-
+    async delete(id, type, params) {
+        await Promise.promisify(this.client.delete, {context: this.client})(
+            {
+                TableName: `${process.env.DYNAMODB_TABLE_PREFIX}_${type.toUpperCase()}`,
+                Key: {
+                    id: `${id}`
+                }
+            }
+        ).catch(err => {
+            throw err;
+        });
     }
 }

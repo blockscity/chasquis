@@ -33,4 +33,14 @@ export default class Messengers {
             throw e;
         }
     };
+
+    async delete(mid) {
+        try {
+            await this.medium.delete(mid, Messenger.type).catch(err => {
+                throw err;
+            });
+        } catch (e) {
+            throw e;
+        }
+    };
 }

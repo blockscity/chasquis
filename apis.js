@@ -111,9 +111,7 @@ export const messengers_create = async (event, context, cb) => {
             throw err
         });
 
-        let messenger = await messengers.create({
-            id: payload.data.id
-        });
+        let messenger = await messengers.create(payload.data);
         cb(null, created(messenger.toJson()));
     } catch (e) {
         cb(null, bad_request(errorify(e)))
@@ -134,11 +132,11 @@ export const messengers_of = async (event, context, cb) => {
 
 export const messengers_update = async (event, context, cb) => {
     try {
-        let body = JSON.parse(event.body);
+        let payload = JSON.parse(event.body);
         let id = event.pathParameters.id;
         let messenger = await messengers.of(id);
 
-        await messenger.update(body.data);
+        await messenger.update(payload.data);
         cb(null, ok(messenger.toJson()));
     } catch (e) {
         cb(null, bad_request(errorify(e)))

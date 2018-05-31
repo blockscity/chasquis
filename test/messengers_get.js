@@ -30,7 +30,11 @@ describe('messengers_get', () => {
                         data: {
                             id: "1",
                             type: "messengers",
-                            attributes: {}
+                            attributes: {
+                                content: {
+                                    access_token: "access_token"
+                                }
+                            }
                         }
                     })}`
                 },
@@ -69,6 +73,7 @@ describe('messengers_get', () => {
         ).then(response => {
             expect(response.statusCode).to.be.equal(200);
             expect(JSON.parse(response.body).data.id).to.be.equal('1')
+            expect(JSON.parse(response.body).data.attributes.content.access_token).to.equal("access_token")
         });
     });
 });

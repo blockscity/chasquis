@@ -14,7 +14,7 @@ export default class Medium {
                 TableName: `${process.env.DYNAMODB_TABLE_PREFIX}_${params.type.toUpperCase()}`,
                 Item: {
                     id: params.id,
-                    content: params.content,
+                    content: JSON.stringify(params.content || {}),
                     expired: expired,
                     created_at: timestamp,
                     updated_at: timestamp,
@@ -34,7 +34,7 @@ export default class Medium {
                 id: id,
             },
             ExpressionAttributeValues: {
-                ':content': JSON.stringify(data.content),
+                ':content': JSON.stringify(data.content || {}),
                 ':updated_at': timestamp
             },
             UpdateExpression: 'SET content = :content, updated_at = :updated_at',
@@ -63,7 +63,7 @@ export default class Medium {
 
         return {
             id: id,
-            content: ofId.Item.content
+            content: JSON.parse(ofId.Item.content)
         }
     }
 

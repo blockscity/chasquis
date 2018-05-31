@@ -6,18 +6,19 @@ export default class Messengers {
         this.medium = medium;
     }
 
-    async create(params) {
+    async create(data) {
         try {
             await this.medium.create({
-                id: params.id,
-                type: Messenger.type
+                id: data.id,
+                type: Messenger.type,
+                content: data.attributes.content
             }).catch(err => {
                 if (err.code === 'ConditionalCheckFailedException') {
                     throw "Already exists";
                 }
                 throw err;
             });
-            return new Messenger(params.id, {}, this.medium);
+            return new Messenger(data.id, {}, this.medium);
         } catch (e) {
             throw e;
         }

@@ -17,12 +17,13 @@ function no_content() {
     };
 }
 
-function created(data) {
+function created(payload) {
     return {
         statusCode: 201,
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
         headers: {
-            Location: `/messengers/${data.id}`
+            'access-control-expose-headers': 'Location',
+            Location: `/messengers/${payload.data.id}`
         }
     };
 }
@@ -63,6 +64,7 @@ let AWS = require("aws-sdk");
 let options;
 if (process.env.IS_OFFLINE) {
     options = {
+        region: "localhost",
         endpoint: 'http://localhost:8000'
     };
 }

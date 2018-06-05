@@ -11,7 +11,7 @@ export default class Messengers {
             await this.medium.create({
                 id: data.id,
                 type: Messenger.type,
-                content: data.attributes.content
+                attributes: data.attributes || {}
             }).catch(err => {
                 if (err.code === 'ConditionalCheckFailedException') {
                     throw "Already exists";
@@ -29,7 +29,7 @@ export default class Messengers {
             let rehydrated = await this.medium.of(mid, Messenger.type).catch(err => {
                 throw err;
             });
-            return new Messenger(mid, rehydrated.content, this.medium);
+            return new Messenger(mid, rehydrated.attributes, this.medium);
         } catch (e) {
             throw e;
         }

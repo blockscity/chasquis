@@ -99,7 +99,7 @@ export const messengers_create = async (event, context, cb) => {
                         }
                     }
                 },
-                required: ["attributes", "id", "type"]
+                required: ["id", "type"]
             }
         },
         required: ["data"]

@@ -14,7 +14,7 @@ export default class Medium {
                 TableName: `${process.env.DYNAMODB_TABLE_PREFIX}_${params.type.toUpperCase()}`,
                 Item: {
                     id: params.id,
-                    content: JSON.stringify(params.content || {}),
+                    attributes: JSON.stringify(params.attributes || {}),
                     expired: expired,
                     created_at: timestamp,
                     updated_at: timestamp,
@@ -34,10 +34,10 @@ export default class Medium {
                 id: id,
             },
             ExpressionAttributeValues: {
-                ':content': JSON.stringify(data.content || {}),
+                ':attributes': JSON.stringify(data.attributes || {}),
                 ':updated_at': timestamp
             },
-            UpdateExpression: 'SET content = :content, updated_at = :updated_at',
+            UpdateExpression: 'SET attributes = :attributes, updated_at = :updated_at',
             ReturnValues: 'ALL_NEW',
         };
         let result = await Promise.promisify(this.client.update, {context: this.client})(params).catch(err => {
@@ -45,7 +45,7 @@ export default class Medium {
         });
         return {
             id: id,
-            content: JSON.parse(result.Attributes.content)
+            attributes: JSON.parse(result.Attributes.attributes)
         }
     }
 
@@ -63,7 +63,7 @@ export default class Medium {
 
         return {
             id: id,
-            content: JSON.parse(ofId.Item.content)
+            attributes: JSON.parse(ofId.Item.attributes)
         }
     }
 

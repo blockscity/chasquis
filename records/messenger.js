@@ -1,32 +1,33 @@
 class Messenger {
-    constructor(id, content, medium) {
+    constructor(id, attributes, medium) {
         this.id = id;
-        this.content = content;
+        this.attributes = attributes;
         this.medium = medium;
     }
 
     toJson() {
-        return {
+        let json = {
             data: {
                 id: `${this.id}`,
                 type: "messengers",
-                attributes:
-                    {
-                        content: this.content
-                    }
+                attributes: {}
             }
+        };
+        if (this.attributes) {
+            json.data.attributes = this.attributes;
         }
+        return json;
     }
 
 
     async update(data) {
         try {
             let updated = await this.medium.update(this.id, Messenger.type, {
-                content: data.attributes.content
+                attributes: data.attributes
             }).catch(err => {
                 throw err;
             });
-            this.content = updated.content;
+            this.attributes = updated.attributes;
             return this;
         } catch (e) {
             throw e;
